@@ -1,6 +1,6 @@
-# 🎯 Roadmap - Descargador MP3/MP4
+# Roadmap - Descargador MP3/MP4
 
-## ✅ Funcionalidades Implementadas
+## Funcionalidades Implementadas
 
 - [x] Descarga de audio desde YouTube
 - [x] Conversión automática a MP3
@@ -11,15 +11,19 @@
 - [x] Gestión de errores y mensajes informativos
 - [x] Archivo `requirements.txt` para dependencias
 - [x] Documentación básica (README)
+- [x] **Descarga de video (MP4)**
+- [x] **Selector de calidad de video** (360p, 480p, 720p, 1080p, Best)
+- [x] **Menú interactivo CLI** con emojis y formato mejorado
+- [x] **Merge correcto de audio y video** en formato MP4
 
-## 🚀 Objetivos a Futuro
+## Objetivos a Futuro
 
-### Fase 1: Expansión de Formatos
-- [ ] **Soporte para descarga de video (MP4)**
-  - [ ] Implementar opción de descarga en MP4
-  - [ ] Permitir selección de calidad de video (720p, 1080p, 4K)
+### Fase 1: Expansión de Formatos COMPLETADA
+- [x] **Soporte para descarga de video (MP4)**
+  - [x] Implementar opción de descarga en MP4
+  - [x] Permitir selección de calidad de video (720p, 1080p, 4K)
   - [ ] Opción para descargar solo video sin audio
-  - [ ] Combinar video y audio en diferentes calidades
+  - [x] Combinar video y audio en diferentes calidades
 
 ### Fase 2: Interfaz de Usuario
 - [ ] **Frontend Web**
@@ -59,7 +63,7 @@
   - [ ] Descarga de canales completos
   - [ ] Filtros por duración, fecha, etc.
 
-## 💡 Mejoras Propuestas
+## Mejoras Propuestas
 
 ### Funcionalidad
 - [ ] Descarga de subtítulos
@@ -97,7 +101,7 @@
 - [ ] Monitoreo con Prometheus/Grafana
 - [ ] Despliegue en la nube (AWS/Azure/GCP)
 
-## 📊 Arquitectura Futura Propuesta
+## Arquitectura Futura Propuesta
 
 ```
 ┌─────────────────┐
@@ -124,7 +128,7 @@
 └─────────────────┘
 ```
 
-## 📝 Notas de Desarrollo
+## Notas de Desarrollo
 
 ### Prioridad Alta
 1. Soporte MP4
@@ -141,9 +145,15 @@
 2. Extensión de navegador
 3. Soporte para otras plataformas
 
-## 🔄 Changelog
+## Changelog
 
-### v0.1.0 (Actual)
+### v0.2.0 - Soporte MP4 (15 Diciembre 2025)
+- Agregado soporte completo para descarga de video MP4
+- Selector interactivo de calidad (360p - 1080p - Best)
+- Corregido merge de audio y video en MP4
+- Documentación actualizada con ejemplos y troubleshooting
+
+### v0.1.0 - Versión Inicial (15 Diciembre 2025)
 - Versión inicial con descarga de MP3
 - Integración con yt-dlp y static-ffmpeg
 - Línea de comandos básica
