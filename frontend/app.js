@@ -70,6 +70,19 @@ formatRadios.forEach(radio => {
 form.addEventListener('submit', handleSubmit);
 downloadFileBtn.addEventListener('click', handleDownloadFile);
 urlInput.addEventListener('blur', loadVideoPreview);
+urlInput.addEventListener('input', () => {
+    clearTimeout(urlInput.debounceTimer);
+    urlInput.debounceTimer = setTimeout(() => {
+        // Clear previous download state when URL changes
+        if (currentTaskId) {
+            hideProgress();
+            document.getElementById('successActions').style.display = 'none';
+            stopPolling();
+            currentTaskId = null;
+        }
+        loadVideoPreview();
+    }, 500);
+});
 urlInput.addEventListener('paste', () => {
     setTimeout(loadVideoPreview, 100);
 });
