@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+.venv
+
+# Archivos descargados
+*.mp3
+*.mp4
+*.webm
+*.m4a
+*.opus
+*.wav
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Base de datos (futuro)
+*.db
+*.sqlite3
+
+# Variables de entorno
+.env
+.env.local
+
+# Celery (futuro)
+celerybeat-schedule
+celerybeat.pid
+
+# Coverage y tests
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Build y distribución
+build/
+dist/
+*.egg-info/
