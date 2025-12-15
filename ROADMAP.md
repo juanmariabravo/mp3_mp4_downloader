@@ -31,7 +31,7 @@
   - [ ] Opción para descargar solo video sin audio
   - [x] Combinar video y audio en diferentes calidades
 
-### Fase 2: Interfaz de Usuario ✅ COMPLETADA
+### Fase 2: Interfaz de Usuario COMPLETADA
 - [x] **Frontend Web**
   - [x] Crear interfaz web con HTML/CSS/JavaScript
   - [x] Formulario para pegar URLs
@@ -60,7 +60,6 @@
   - [x] Documentación automática (Swagger/ReDoc)
   - [x] CORS configurado
   - [x] Archivos guardados con título original
-  - [ ] Sistema de autenticación básico
 
 ### Fase 3: Sistema de Colas
 - [ ] **Integración de Celery**
@@ -87,10 +86,9 @@
 - [ ] Normalización de audio
 - [ ] Recorte de audio (inicio/fin)
 - [ ] Conversión entre formatos (MP3, FLAC, WAV, AAC)
-- [ ] Descarga desde otras plataformas (Spotify, SoundCloud, etc.)
 
 ### Interfaz
-- [ ] Modo oscuro/claro
+- [x] Modo oscuro/claro
 - [ ] Soporte multiidioma (ES/EN)
 - [ ] Aplicación de escritorio con Electron
 - [ ] Extensión de navegador
@@ -161,29 +159,29 @@
 2. Extensión de navegador
 3. Soporte para otras plataformas
 
-## 🔄 Changelog
+## Changelog
 
-### v0.3.0 - API REST + Refactorización (15 Diciembre 2025) 🆕
-- ✨ **API REST completa con FastAPI**
+### v0.3.0 - API REST + Refactorización (15 Diciembre 2025)
+- **API REST completa con FastAPI**
   - Endpoints POST /download y GET /download/status/{task_id}
   - Documentación automática con Swagger UI y ReDoc
   - Modelos Pydantic para validación
   - CORS configurado para frontend
   - TaskManager para gestión de descargas asíncronas
-- 🔧 **Refactorización completa del código**
+- **Refactorización completa del código**
   - Módulo `core/` con DownloaderService reutilizable
   - Configuración centralizada con enums tipados
   - CLI refactorizado usando el core
   - 8 tests unitarios con pytest
   - Estructura modular preparada para escalabilidad
-- 📝 Documentación completa de la API con ejemplos
+- Documentación completa de la API con ejemplos
 
 ### v0.2.0 - Soporte MP4 (15 Diciembre 2025)
-- ✨ Agregado soporte completo para descarga de video MP4
-- ✨ Selector interactivo de calidad (360p - 1080p - Best)
-- ✨ Menú CLI mejorado con emojis y mejor UX
-- 🐛 Corregido merge de audio y video en MP4
-- 📝 Documentación actualizada con ejemplos y troubleshooting
+- Agregado soporte completo para descarga de video MP4
+- Selector interactivo de calidad (360p - 1080p - Best)
+- Menú CLI mejorado con emojis y mejor UX
+- Corregido merge de audio y video en MP4
+- Documentación actualizada con ejemplos y troubleshooting
 
 ### v0.1.0 - Versión Inicial (15 Diciembre 2025)
 - Versión inicial con descarga de MP3
