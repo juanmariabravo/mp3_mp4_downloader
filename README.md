@@ -1,16 +1,20 @@
 # Descargador de YouTube - MP3 & MP4
 
 Descarga y convierte videos de YouTube a MP3 o MP4 con alta calidad. 
-Incluye interfaz de línea de comandos interactiva, y próximamente API REST con Celery y frontend web.
+Incluye interfaz de línea de comandos (CLI), API REST con FastAPI y frontend web interactivo.
 
 ## Características
 
 - **Descarga de audio (MP3)** - Extrae solo el audio en máxima calidad
 - **Descarga de video (MP4)** - Video con audio en diferentes resoluciones
 - **Selector de calidad** - Elige entre 360p, 480p, 720p, 1080p o la mejor disponible
-- **Menú interactivo** - Interfaz CLI fácil de usar
+- **3 formas de usar:**
+  - **CLI interactiva** - Menú en terminal
+  - **API REST** - Endpoints HTTP con FastAPI
+  - **Frontend web** - Interfaz gráfica en el navegador
 - **Solo videos individuales** - Evita descargas masivas de playlists
 - **Nombres automáticos** - Archivos nombrados con el título del video
+- **Progreso en tiempo real** - Seguimiento de descargas (API/Frontend)
 - **Manejo de errores** - Mensajes claros de estado y errores
 
 ## Requisitos Previos
@@ -47,6 +51,8 @@ Incluye interfaz de línea de comandos interactiva, y próximamente API REST con
 
 ## Uso
 
+### Opción 1: Interfaz de Línea de Comandos (CLI)
+
 1. **Ejecuta el script:**
    ```powershell
    python downloader.py
@@ -63,7 +69,47 @@ Incluye interfaz de línea de comandos interactiva, y próximamente API REST con
 
 4. **Pega la URL del video de YouTube**
 
-5. **El archivo se guardará en la misma carpeta** con el nombre del video
+5. **El archivo se guardará en la carpeta `downloads/`** con el nombre del video
+
+### Opción 2: API REST
+
+1. **Inicia el servidor API:**
+   ```powershell
+   uvicorn api.main:app --reload
+   ```
+
+2. **Accede a la documentación interactiva:**
+   - Swagger UI: http://localhost:8000/docs
+   - ReDoc: http://localhost:8000/redoc
+
+3. **Endpoints disponibles:**
+   - `POST /download` - Inicia una descarga
+   - `GET /download/status/{task_id}` - Consulta el estado
+   - `GET /health` - Health check
+
+Ver [api/README.md](api/README.md) para ejemplos de uso.
+
+### Opción 3: Frontend Web
+
+1. **Inicia el servidor API** (si no está corriendo):
+   ```powershell
+   uvicorn api.main:app --reload
+   ```
+
+2. **Abre el frontend** en tu navegador:
+   ```powershell
+   Start-Process frontend\index.html
+   ```
+   O simplemente abre `frontend/index.html` haciendo doble clic.
+
+3. **Usa la interfaz web:**
+   - Pega la URL del video de YouTube
+   - Selecciona MP3 o MP4
+   - Si elegiste MP4, selecciona la calidad
+   - Haz clic en "Descargar" y observa el progreso en tiempo real
+   - Los archivos se guardan en `downloads/`
+
+Ver [frontend/README.md](frontend/README.md) para más detalles.
 
 ## Ejemplo de Uso
 
@@ -134,10 +180,13 @@ Asegúrate de usar la última versión del código. El problema ha sido corregid
 
 ## Próximas Funcionalidades
 
-- API REST con FastAPI
-- Sistema de colas con Celery
-- Frontend web interactivo
+- ~~API REST con FastAPI~~ ✅ Completado (v0.3.0)
+- ~~Frontend web interactivo~~ ✅ Completado (v0.3.0)
+- Sistema de colas persistente con Celery
+- WebSockets para progreso en tiempo real
 - Descarga de playlists completas
+- Autenticación y autorización
+- Contenedores Docker para deployment
 
 Ver [ROADMAP.md](ROADMAP.md) para más detalles.
 

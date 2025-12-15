@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Downloader - MP3 & MP4</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1><i class="fab fa-youtube"></i> YouTube Downloader</h1>
+            <p class="subtitle">Descarga audio y video de YouTube de forma simple</p>
+        </header>
+
+        <!-- Main Form -->
+        <main>
+            <div class="card">
+                <form id="downloadForm">
+                    <!-- URL Input -->
+                    <div class="form-group">
+                        <label for="videoUrl">
+                            <span class="label-icon"><i class="fas fa-link"></i></span>
+                            URL del Video
+                        </label>
+                        <input type="url" id="videoUrl" placeholder="https://www.youtube.com/watch?v=..." required>
+                    </div>
+
+                    <!-- Format Selection -->
+                    <div class="form-group">
+                        <label>
+                            <span class="label-icon"><i class="fas fa-file-audio"></i></span>
+                            Formato
+                        </label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="format" value="mp3" checked>
+                                <span class="radio-custom"></span>
+                                <span class="radio-text">MP3 (Solo audio)</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="format" value="mp4">
+                                <span class="radio-custom"></span>
+                                <span class="radio-text">MP4 (Video con audio)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Quality Selection (only for MP4) -->
+                    <div class="form-group" id="qualityGroup" style="display: none;">
+                        <label for="quality">
+                            <span class="label-icon"><i class="fas fa-video"></i></span>
+                            Calidad del Video
+                        </label>
+                        <select id="quality">
+                            <option value="360">360p (Baja calidad)</option>
+                            <option value="480">480p (Calidad media)</option>
+                            <option value="720" selected>720p HD (Recomendado)</option>
+                            <option value="1080">1080p Full HD</option>
+                            <option value="best">Mejor calidad disponible</option>
+                        </select>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-primary" id="downloadBtn">
+                        <i class="fas fa-download"></i>
+                        Iniciar Descarga
+                    </button>
+                </form>
+            </div>
+
+            <!-- Progress Section -->
+            <div id="progressSection" class="card" style="display: none;">
+                <div class="progress-header">
+                    <h3>Estado de la Descarga</h3>
+                    <span class="task-id" id="taskIdDisplay"></span>
+                </div>
+
+                <div class="status-badge" id="statusBadge">
+                    <span class="status-icon"><i class="fas fa-hourglass-half"></i></span>
+                    <span id="statusText">Iniciando...</span>
+                </div>
+
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <span class="progress-text" id="progressText">0%</span>
+                </div>
+
+                <div class="status-message" id="statusMessage"></div>
+
+                <div id="successActions" style="display: none;">
+                    <button class="btn-primary" id="downloadFileBtn" style="margin-bottom: 1rem;">
+                        <i class="fas fa-file-download"></i> Descargar Archivo
+                    </button>
+                    <button class="btn-secondary" onclick="resetForm()">
+                        <i class="fas fa-arrow-left"></i> Nueva Descarga
+                    </button>
+                </div>
+            </div>
+
+            <!-- Error Section -->
+            <div id="errorSection" class="card error-card" style="display: none;">
+                <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
+                <p id="errorMessage"></p>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Intentar de Nuevo
+                </button>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <p>
+                <strong>API REST:</strong>
+                <a href="http://localhost:8000/docs" target="_blank">Documentación</a> |
+                <a href="https://github.com/juanmariabravo/mp3_mp4_downloader" target="_blank"><i
+                        class="fab fa-github"></i> GitHub</a>
+            </p>
+            <p class="footer-note">
+                <i class="fas fa-exclamation-circle"></i> Respeta los derechos de autor. Solo para uso educativo.
+            </p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

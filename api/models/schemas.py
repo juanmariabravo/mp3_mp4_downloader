@@ -84,6 +84,7 @@ class TaskStatusResponse(BaseModel):
     created_at: datetime = Field(..., description="Fecha de creación")
     completed_at: Optional[datetime] = Field(default=None, description="Fecha de finalización")
     file_path: Optional[str] = Field(default=None, description="Ruta del archivo descargado")
+    file_name: Optional[str] = Field(default=None, description="Nombre del archivo descargado")
     error: Optional[str] = Field(default=None, description="Mensaje de error si falló")
     
     model_config = {

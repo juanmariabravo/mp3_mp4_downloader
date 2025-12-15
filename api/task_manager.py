@@ -6,6 +6,8 @@ from datetime import datetime
 from typing import Dict, Optional
 from threading import Thread
 import sys
+import os
+import glob
 from pathlib import Path
 
 # Agregar el directorio raíz al path
@@ -30,6 +32,7 @@ class Task:
         self.created_at = datetime.now()
         self.completed_at: Optional[datetime] = None
         self.file_path: Optional[str] = None
+        self.file_name: Optional[str] = None
         self.error: Optional[str] = None
     
     def to_response(self) -> TaskStatusResponse:
@@ -42,6 +45,7 @@ class Task:
             created_at=self.created_at,
             completed_at=self.completed_at,
             file_path=self.file_path,
+            file_name=self.file_name,
             error=self.error
         )
 
@@ -100,9 +104,18 @@ class TaskManager:
             task.message = "Descargando..."
             task.progress = 10.0
             
+            # Crear directorio downloads si no existe
+            downloads_dir = Path("downloads")
+            downloads_dir.mkdir(exist_ok=True)
+            
+            # Usar template de yt-dlp para incluir el título del video
+            # Formato: {task_id}_%(title)s.ext
+            file_extension = "mp3" if task.format_type == "mp3" else "mp4"
+            output_template = str(downloads_dir / f"{task_id}_%(title)s.{file_extension}")
+            
             # Ejecutar descarga según el formato
             if task.format_type == "mp3":
-                result = self.downloader.download_audio(task.url)
+                result = self.downloader.download_audio(task.url, output_path=output_template)
             else:
                 # Convertir quality string a VideoQuality enum
                 quality_map = {
@@ -113,7 +126,7 @@ class TaskManager:
                     "best": VideoQuality.BEST
                 }
                 quality_enum = quality_map.get(task.quality, VideoQuality.HD)
-                result = self.downloader.download_video(task.url, quality=quality_enum)
+                result = self.downloader.download_video(task.url, quality=quality_enum, output_path=output_template)
             
             # Actualizar progreso
             task.progress = 90.0
@@ -126,8 +139,20 @@ class TaskManager:
                 task.progress = 100.0
                 task.message = result.message
                 task.completed_at = datetime.now()
-                # Aquí deberíamos extraer el nombre del archivo del output
-                task.file_path = "downloads/archivo.mp3"  # Placeholder
+                
+                # Buscar el archivo descargado que comienza con el task_id
+                pattern = str(downloads_dir / f"{task_id}_*.{file_extension}")
+                files = glob.glob(pattern)
+                
+                if files:
+                    # Debería haber solo un archivo
+                    file_path = files[0]
+                    task.file_path = os.path.abspath(file_path)
+                    # Extraer solo el nombre del archivo (sin la ruta)
+                    task.file_name = os.path.basename(file_path)
+                else:
+                    task.file_path = None
+                    task.file_name = None
             else:
                 task.status = TaskStatus.FAILED
                 task.message = result.message

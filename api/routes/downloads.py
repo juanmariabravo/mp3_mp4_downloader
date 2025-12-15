@@ -2,7 +2,9 @@
 Rutas para las operaciones de descarga.
 """
 from fastapi import APIRouter, HTTPException, status
+from fastapi.responses import FileResponse
 from datetime import datetime
+import os
 
 from api.models import (
     DownloadRequest,
@@ -36,7 +38,7 @@ async def create_download(request: DownloadRequest):
     try:
         # Validar que si es MP4, se proporcione calidad
         quality = None
-        if request.format == "mp4":
+        if request.format.value == "mp4":
             quality = request.quality.value if request.quality else "720"
         
         # Crear tarea
@@ -83,3 +85,60 @@ async def get_download_status(task_id: str):
         )
     
     return task.to_response()
+
+
+@router.get(
+    "/file/{task_id}",
+    summary="Descargar archivo",
+    description="Descarga el archivo resultante de una tarea completada"
+)
+async def download_file(task_id: str):
+    """
+    Descarga el archivo de una tarea completada.
+    
+    - **task_id**: ID de la tarea completada
+    
+    Retorna el archivo descargado para que el usuario lo pueda guardar.
+    """
+    task = task_manager.get_task(task_id)
+    
+    if not task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Tarea {task_id} no encontrada"
+        )
+    
+    if task.status != "completed":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"La tarea aún no ha sido completada. Estado actual: {task.status}"
+        )
+    
+    if not task.file_path:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Archivo no encontrado para esta tarea"
+        )
+    
+    file_path = task.file_path
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"El archivo no existe en el servidor"
+        )
+    
+    # Obtener el nombre del archivo sin el task_id
+    # Formato: task_id_nombre_real.ext -> nombre_real.ext
+    filename = task.file_name or os.path.basename(file_path)
+    
+    # Remover el task_id del nombre para dar el archivo con su nombre original
+    if filename.startswith(task_id):
+        # Formato: {task_id}_título.ext -> título.ext
+        filename = filename[len(task_id)+1:]  # +1 para el guion bajo
+    
+    return FileResponse(
+        path=file_path,
+        filename=filename,
+        media_type='application/octet-stream'
+    )
