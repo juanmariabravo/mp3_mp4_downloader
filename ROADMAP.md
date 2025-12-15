@@ -11,6 +11,12 @@
 - [x] Gestión de errores y mensajes informativos
 - [x] Archivo `requirements.txt` para dependencias
 - [x] Documentación básica (README)
+- [x] **Vista previa de video**
+  - [x] Endpoint GET /download/info para obtener metadatos
+  - [x] VideoInfo class con formateo de duración y vistas
+  - [x] Integración con yt-dlp --dump-json
+  - [x] Miniatura, título, autor, duración, vistas y descripción
+  - [x] Carga automática en blur y paste events
 - [x] **Descarga de video (MP4)**
 - [x] **Selector de calidad de video** (360p, 480p, 720p, 1080p, Best)
 - [x] **Menú interactivo CLI** con emojis y formato mejorado
@@ -36,8 +42,10 @@
   - [x] Descarga de archivos desde el navegador
   - [x] Iconos profesionales con Font Awesome
   - [x] Diseño responsive
+  - [x] Vista previa de información del video con miniatura
+  - [x] Carga automática de metadatos al pegar URL
+  - [x] Scroll suave al resetear formulario
   - [ ] Historial de descargas
-  - [ ] Vista previa de información del video
 
 - [x] **Backend API**
   - [x] API REST con FastAPI
@@ -45,6 +53,7 @@
     - [x] `POST /download` - Iniciar descarga
     - [x] `GET /status/{task_id}` - Consultar progreso
     - [x] `GET /download/file/{task_id}` - Descargar archivo
+    - [x] `GET /download/info?url=...` - Obtener metadatos del video
     - [ ] `GET /history` - Historial de descargas
   - [x] Validación de URLs con Pydantic
   - [x] Gestión de tareas con TaskManager

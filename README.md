@@ -14,6 +14,7 @@ Incluye interfaz de línea de comandos (CLI), API REST con FastAPI y frontend we
   - **Frontend web** - Interfaz gráfica en el navegador
 - **Solo videos individuales** - Evita descargas masivas de playlists
 - **Nombres automáticos** - Archivos nombrados con el título del video
+- **Vista previa del video** - Ve información del video antes de descargar
 - **Progreso en tiempo real** - Seguimiento de descargas (API/Frontend)
 - **Manejo de errores** - Mensajes claros de estado y errores
 
@@ -85,6 +86,8 @@ Incluye interfaz de línea de comandos (CLI), API REST con FastAPI y frontend we
 3. **Endpoints disponibles:**
    - `POST /download` - Inicia una descarga
    - `GET /download/status/{task_id}` - Consulta el estado
+   - `GET /download/file/{task_id}` - Descarga el archivo completado
+   - `GET /download/info?url=...` - Obtiene información del video
    - `GET /health` - Health check
 
 Ver [api/README.md](api/README.md) para ejemplos de uso.
@@ -104,9 +107,11 @@ Ver [api/README.md](api/README.md) para ejemplos de uso.
 
 3. **Usa la interfaz web:**
    - Pega la URL del video de YouTube
+   - **Verás automáticamente** una vista previa con miniatura, título, duración y vistas
    - Selecciona MP3 o MP4
    - Si elegiste MP4, selecciona la calidad
    - Haz clic en "Descargar" y observa el progreso en tiempo real
+   - Descarga el archivo directamente desde el navegador
    - Los archivos se guardan en `downloads/`
 
 Ver [frontend/README.md](frontend/README.md) para más detalles.

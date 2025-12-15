@@ -18,6 +18,28 @@ python -m uvicorn api.main:app --reload --port 8000
 
 ## Endpoints
 
+### GET /download/info
+Obtiene información de un video de YouTube sin descargarlo.
+
+**Query Parameters:**
+- `url` (string, required): URL del video de YouTube
+
+**Response (200 OK):**
+```json
+{
+  "title": "Título del Video",
+  "duration": 240,
+  "duration_string": "4:00",
+  "thumbnail": "https://i.ytimg.com/vi/...",
+  "uploader": "Nombre del Canal",
+  "view_count": 1500000,
+  "view_count_string": "1.5M",
+  "description": "Descripción del video...",
+  "upload_date": "20251215",
+  "url": "https://www.youtube.com/watch?v=..."
+}
+```
+
 ### POST /download
 Inicia una descarga de YouTube.
 
@@ -56,6 +78,17 @@ Consulta el estado de una descarga.
   "error": null
 }
 ```
+
+### GET /download/file/{task_id}
+Descarga el archivo resultante de una tarea completada.
+
+**Response:**
+- Archivo descargado con el nombre original del video
+- Content-Type: `application/octet-stream`
+- Content-Disposition: `attachment; filename="Título del Video.mp3"`
+
+**Estados requeridos:**
+- Solo funciona si la tarea está en estado `completed`
 
 ## Ejemplos de Uso
 
@@ -163,6 +196,33 @@ const result = await pollStatus(task_id);
 console.log('Archivo:', result.file_path);
 ```
 
+### Obtener Vista Previa del Video
+
+**Con cURL:**
+```bash
+curl "http://localhost:8000/download/info?url=https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+```
+
+**Con JavaScript:**
+```javascript
+const response = await fetch(
+  `http://localhost:8000/download/info?url=${encodeURIComponent(videoUrl)}`
+);
+const videoInfo = await response.json();
+
+console.log('Título:', videoInfo.title);
+console.log('Duración:', videoInfo.duration_string);
+console.log('Vistas:', videoInfo.view_count_string);
+```
+
+### Descargar Archivo Completado
+
+**Con JavaScript:**
+```javascript
+// Después de que la tarea esté completada
+window.open(`http://localhost:8000/download/file/${task_id}`, '_blank');
+```
+
 ## Formatos y Calidades
 
 ### Formatos Soportados
@@ -219,7 +279,8 @@ python -m uvicorn api.main:app --host 0.0.0.0 --port 3000
 - [ ] Base de datos (PostgreSQL/MongoDB) para tareas
 - [ ] Autenticación con JWT
 - [ ] Rate limiting
-- [ ] Endpoint para descargar archivos directamente
+- [x] Endpoint para descargar archivos directamente
+- [x] Endpoint para obtener información del video
 - [ ] WebSockets para progreso en tiempo real
 - [ ] Storage en S3/Azure Blob
 - [ ] Cleanup automático de archivos antiguos
