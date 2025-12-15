@@ -1,7 +1,7 @@
 """
 Rutas para las operaciones de descarga.
 """
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Query
 from fastapi.responses import FileResponse
 from datetime import datetime
 import os
@@ -14,8 +14,44 @@ from api.models import (
     TaskStatus
 )
 from api.task_manager import task_manager
+from core import DownloaderService
 
 router = APIRouter(prefix="/download", tags=["downloads"])
+
+# Instancia del servicio para obtener info de videos
+_downloader = DownloaderService()
+
+
+@router.get(
+    "/info",
+    summary="Obtener información del video",
+    description="Obtiene información de un video de YouTube sin descargarlo"
+)
+async def get_video_info(url: str = Query(..., description="URL del video de YouTube")):
+    """
+    Obtiene información de un video de YouTube.
+    
+    - **url**: URL del video de YouTube
+    
+    Retorna información como título, duración, thumbnail, autor, vistas, etc.
+    """
+    try:
+        video_info = _downloader.get_video_info(url)
+        
+        if not video_info:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="No se pudo obtener información del video. Verifica que la URL sea válida."
+            )
+        
+        return video_info.to_dict()
+    
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al obtener información del video: {str(e)}"
+        )
+
 
 
 @router.post(

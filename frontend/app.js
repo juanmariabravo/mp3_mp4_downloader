@@ -11,6 +11,7 @@ const qualitySelect = document.getElementById('quality');
 const submitBtn = document.getElementById('downloadBtn');
 const progressSection = document.getElementById('progressSection');
 const errorSection = document.getElementById('errorSection');
+const previewSection = document.getElementById('previewSection');
 const taskIdSpan = document.getElementById('taskIdDisplay');
 const statusBadge = document.getElementById('statusBadge');
 const statusText = document.getElementById('statusText');
@@ -20,9 +21,18 @@ const statusMessage = document.getElementById('statusMessage');
 const errorMessage = document.getElementById('errorMessage');
 const downloadFileBtn = document.getElementById('downloadFileBtn');
 
+// Preview elements
+const videoThumbnail = document.getElementById('videoThumbnail');
+const videoTitle = document.getElementById('videoTitle');
+const videoUploader = document.getElementById('videoUploader');
+const videoDuration = document.getElementById('videoDuration');
+const videoViews = document.getElementById('videoViews');
+const videoDescription = document.getElementById('videoDescription');
+
 // State
 let currentTaskId = null;
 let pollingInterval = null;
+let videoInfo = null;
 
 // Event Listeners
 formatRadios.forEach(radio => {
@@ -31,8 +41,53 @@ formatRadios.forEach(radio => {
 
 form.addEventListener('submit', handleSubmit);
 downloadFileBtn.addEventListener('click', handleDownloadFile);
+urlInput.addEventListener('blur', loadVideoPreview);
+urlInput.addEventListener('paste', () => {
+    setTimeout(loadVideoPreview, 100);
+});
 
 // Functions
+async function loadVideoPreview() {
+    const url = urlInput.value.trim();
+
+    if (!url || !url.includes('youtube.com') && !url.includes('youtu.be')) {
+        hidePreview();
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/download/info?url=${encodeURIComponent(url)}`);
+
+        if (!response.ok) {
+            hidePreview();
+            return;
+        }
+
+        videoInfo = await response.json();
+        showPreview(videoInfo);
+
+    } catch (error) {
+        console.error('Error loading preview:', error);
+        hidePreview();
+    }
+}
+
+function showPreview(info) {
+    videoThumbnail.src = info.thumbnail;
+    videoTitle.textContent = info.title;
+    videoUploader.innerHTML = `<i class="fas fa-user"></i> ${info.uploader}`;
+    videoDuration.innerHTML = `<i class="fas fa-clock"></i> ${info.duration_string}`;
+    videoViews.innerHTML = `<i class="fas fa-eye"></i> ${info.view_count_string} vistas`;
+    videoDescription.textContent = info.description;
+
+    previewSection.style.display = 'block';
+}
+
+function hidePreview() {
+    previewSection.style.display = 'none';
+    videoInfo = null;
+}
+
 function handleFormatChange(e) {
     const isMp4 = e.target.value === 'mp4';
     qualityGroup.style.display = isMp4 ? 'block' : 'none';
@@ -109,12 +164,26 @@ async function handleSubmit(e) {
 }
 
 function resetForm() {
+    // Hacer scroll hacia arriba suavemente
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Limpiar formulario
     form.reset();
     qualityGroup.style.display = 'none';
+    
+    // Ocultar todas las secciones
     hideError();
     hideProgress();
+    hidePreview();
+    
+    // Resetear estado
     setFormDisabled(false);
     document.getElementById('successActions').style.display = 'none';
+    currentTaskId = null;
+    videoInfo = null;
+    
+    // Enfocar en el campo de URL
+    urlInput.focus();
 }
 
 function handleDownloadFile() {
@@ -253,12 +322,6 @@ function updateProgress(data) {
         formatRadios.forEach(radio => radio.disabled = disabled);
         qualitySelect.disabled = disabled;
         submitBtn.disabled = disabled;
-    }
-    
-    function resetForm() {
-        form.reset();
-        qualityGroup.style.display = 'none';
-        hideError();
     }
     
     // Initialize

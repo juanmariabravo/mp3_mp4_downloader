@@ -4,7 +4,8 @@ Servicio de descarga de contenido desde YouTube.
 import subprocess
 import sys
 import os
-from typing import Optional, Tuple
+import json
+from typing import Optional, Tuple, Dict, Any
 from static_ffmpeg import run
 
 from .config import Config, FormatType, VideoQuality
@@ -22,6 +23,54 @@ class DownloadResult:
     def __repr__(self):
         status = "SUCCESS" if self.success else "FAILED"
         return f"DownloadResult({status}, message='{self.message}')"
+
+
+class VideoInfo:
+    """Información de un video de YouTube."""
+    
+    def __init__(self, data: Dict[str, Any]):
+        self.title = data.get('title', 'Desconocido')
+        self.duration = data.get('duration', 0)
+        self.thumbnail = data.get('thumbnail', '')
+        self.uploader = data.get('uploader', 'Desconocido')
+        self.view_count = data.get('view_count', 0)
+        self.description = data.get('description', '')
+        self.upload_date = data.get('upload_date', '')
+        self.webpage_url = data.get('webpage_url', '')
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convierte a diccionario."""
+        return {
+            'title': self.title,
+            'duration': self.duration,
+            'duration_string': self._format_duration(self.duration),
+            'thumbnail': self.thumbnail,
+            'uploader': self.uploader,
+            'view_count': self.view_count,
+            'view_count_string': self._format_views(self.view_count),
+            'description': self.description[:200] + '...' if len(self.description) > 200 else self.description,
+            'upload_date': self.upload_date,
+            'url': self.webpage_url
+        }
+    
+    @staticmethod
+    def _format_duration(seconds: int) -> str:
+        """Formatea la duración en formato legible."""
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        secs = seconds % 60
+        if hours > 0:
+            return f"{hours}:{minutes:02d}:{secs:02d}"
+        return f"{minutes}:{secs:02d}"
+    
+    @staticmethod
+    def _format_views(views: int) -> str:
+        """Formatea el número de vistas."""
+        if views >= 1_000_000:
+            return f"{views / 1_000_000:.1f}M"
+        elif views >= 1_000:
+            return f"{views / 1_000:.1f}K"
+        return str(views)
 
 
 class DownloaderService:
@@ -53,6 +102,47 @@ class DownloaderService:
             return ffmpeg_path, ffprobe_path
         except Exception as e:
             raise RuntimeError(f"Error al inicializar ffmpeg: {e}")
+    
+    def get_video_info(self, url: str) -> Optional[VideoInfo]:
+        """
+        Obtiene información de un video de YouTube sin descargarlo.
+        
+        Args:
+            url: URL del video de YouTube.
+        
+        Returns:
+            VideoInfo con la información del video, o None si hay error.
+        """
+        try:
+            command = [
+                sys.executable,
+                '-m', 'yt_dlp',
+                '--dump-json',
+                '--no-playlist',
+                url
+            ]
+            
+            process = subprocess.run(
+                command,
+                check=True,
+                capture_output=True,
+                text=True,
+                encoding='utf-8',
+                errors='replace'
+            )
+            
+            data = json.loads(process.stdout)
+            return VideoInfo(data)
+        
+        except subprocess.CalledProcessError as e:
+            print(f"Error al obtener información: {e.stderr}")
+            return None
+        except json.JSONDecodeError as e:
+            print(f"Error al decodificar JSON: {e}")
+            return None
+        except Exception as e:
+            print(f"Error inesperado: {e}")
+            return None
     
     def download_audio(self, url: str, output_path: Optional[str] = None) -> DownloadResult:
         """
