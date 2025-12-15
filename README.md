@@ -2,6 +2,7 @@
 
 Descarga y convierte videos de YouTube a MP3 o MP4 con alta calidad. 
 Incluye interfaz de línea de comandos (CLI), API REST con FastAPI y frontend web interactivo.
+<img width="1673" height="941" alt="mp3_mp4_downloader-0" src="https://github.com/user-attachments/assets/d2c9ce6c-a340-4e2c-90a3-a7866c4d36ea" />
 
 ## Características
 
@@ -113,8 +114,6 @@ Ver [api/README.md](api/README.md) para ejemplos de uso.
    - Haz clic en "Descargar" y observa el progreso en tiempo real
    - Descarga el archivo directamente desde el navegador
    - Los archivos se guardan en `downloads/`
-
-Ver [frontend/README.md](frontend/README.md) para más detalles.
 
 ## Notas Importantes
 
