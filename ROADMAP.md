@@ -25,13 +25,17 @@
   - [ ] Opción para descargar solo video sin audio
   - [x] Combinar video y audio en diferentes calidades
 
-### Fase 2: Interfaz de Usuario 🚧 EN PROGRESO
-- [ ] **Frontend Web**
-  - [ ] Crear interfaz web con React/Vue
-  - [ ] Formulario para pegar URLs
-  - [ ] Selector de formato (MP3/MP4)
-  - [ ] Selector de calidad
-  - [ ] Barra de progreso en tiempo real
+### Fase 2: Interfaz de Usuario ✅ COMPLETADA
+- [x] **Frontend Web**
+  - [x] Crear interfaz web con HTML/CSS/JavaScript
+  - [x] Formulario para pegar URLs
+  - [x] Selector de formato (MP3/MP4)
+  - [x] Selector de calidad
+  - [x] Barra de progreso en tiempo real
+  - [x] Polling automático cada 1 segundo
+  - [x] Descarga de archivos desde el navegador
+  - [x] Iconos profesionales con Font Awesome
+  - [x] Diseño responsive
   - [ ] Historial de descargas
   - [ ] Vista previa de información del video
 
@@ -40,12 +44,13 @@
   - [x] Endpoints para:
     - [x] `POST /download` - Iniciar descarga
     - [x] `GET /status/{task_id}` - Consultar progreso
-    - [ ] `GET /download/{file_id}` - Descargar archivo
+    - [x] `GET /download/file/{task_id}` - Descargar archivo
     - [ ] `GET /history` - Historial de descargas
   - [x] Validación de URLs con Pydantic
   - [x] Gestión de tareas con TaskManager
   - [x] Documentación automática (Swagger/ReDoc)
   - [x] CORS configurado
+  - [x] Archivos guardados con título original
   - [ ] Sistema de autenticación básico
 
 ### Fase 3: Sistema de Colas
