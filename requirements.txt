@@ -1,2 +1,3 @@
 yt-dlp
 static-ffmpeg
+pytest>=9.0.0
