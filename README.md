@@ -116,37 +116,6 @@ Ver [api/README.md](api/README.md) para ejemplos de uso.
 
 Ver [frontend/README.md](frontend/README.md) para más detalles.
 
-## Ejemplo de Uso
-
-```
-==================================================
-DESCARGADOR DE YOUTUBE - MP3 & MP4
-==================================================
-
-Selecciona el formato de descarga:
-  1. MP3 (Solo audio)
-  2. MP4 (Video con audio)
-
-Elige una opción (1 o 2): 2
-
-Selecciona la calidad del video:
-  1. 360p (Baja calidad)
-  2. 480p (Calidad media)
-  3. 720p HD (Recomendado)
-  4. 1080p Full HD
-  5. Mejor calidad disponible
-
-Elige una opción (1-5) [Por defecto: 3]: 3
-
-Pega la URL del vídeo a descargar:
-URL: https://youtu.be/ejemplo
-
---- Iniciando descarga MP4 para: https://youtu.be/ejemplo ---
-Formato: MP4 | Calidad: 720p HD (Recomendado)
-
---- DESCARGA COMPLETADA EXITOSAMENTE ---
-```
-
 ## Notas Importantes
 
 - La primera vez que ejecutes el script, `static-ffmpeg` descargará automáticamente los binarios de ffmpeg necesarios (~50 MB)
@@ -162,12 +131,12 @@ Formato: MP4 | Calidad: 720p HD (Recomendado)
 | Audio | `.mp3` | Máxima (VBR 0) | Solo audio, sin video |
 | Video | `.mp4` | 360p, 480p, 720p, 1080p, Best | Video + Audio |
 
-## 🔧 Solución de Problemas
+## Solución de Problemas
 
 ### Error: "Module not found"
 ```powershell
 # Asegúrate de activar el entorno virtual
-.\venv\Scripts\Activate.ps1
+.\venv\Scripts\Activate
 
 # Reinstala las dependencias
 pip install -r requirements.txt

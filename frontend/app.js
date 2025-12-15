@@ -20,6 +20,7 @@ const progressText = document.getElementById('progressText');
 const statusMessage = document.getElementById('statusMessage');
 const errorMessage = document.getElementById('errorMessage');
 const downloadFileBtn = document.getElementById('downloadFileBtn');
+const themeToggle = document.getElementById('themeToggle');
 
 // Preview elements
 const videoThumbnail = document.getElementById('videoThumbnail');
@@ -34,7 +35,34 @@ let currentTaskId = null;
 let pollingInterval = null;
 let videoInfo = null;
 
+// Theme Management
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+}
+
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeIcon(newTheme);
+}
+
+function updateThemeIcon(theme) {
+    const icon = themeToggle.querySelector('i');
+    if (theme === 'dark') {
+        icon.className = 'fas fa-sun';
+    } else {
+        icon.className = 'fas fa-moon';
+    }
+}
+
 // Event Listeners
+themeToggle.addEventListener('click', toggleTheme);
+
 formatRadios.forEach(radio => {
     radio.addEventListener('change', handleFormatChange);
 });
@@ -55,6 +83,9 @@ async function loadVideoPreview() {
         return;
     }
 
+    // Add loading state
+    urlInput.classList.add('loading');
+
     try {
         const response = await fetch(`${API_BASE_URL}/download/info?url=${encodeURIComponent(url)}`);
 
@@ -69,6 +100,8 @@ async function loadVideoPreview() {
     } catch (error) {
         console.error('Error loading preview:', error);
         hidePreview();
+    } finally {
+        urlInput.classList.remove('loading');
     }
 }
 
@@ -328,6 +361,9 @@ function updateProgress(data) {
     document.addEventListener('DOMContentLoaded', () => {
         console.log('YouTube Downloader Frontend initialized');
         console.log(`API Base URL: ${API_BASE_URL}`);
+
+        // Initialize theme
+        initTheme();
     
         // Check if API is reachable
         fetch(`${API_BASE_URL}/health`)
