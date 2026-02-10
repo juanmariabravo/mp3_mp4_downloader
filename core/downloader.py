@@ -119,6 +119,7 @@ class DownloaderService:
                 '-m', 'yt_dlp',
                 '--dump-json',
                 '--no-playlist',
+                '--extractor-args', 'youtube:player_client=android,web',
                 url
             ]
             
@@ -202,6 +203,7 @@ class DownloaderService:
             '--no-playlist' if self.config.NO_PLAYLIST else '--yes-playlist',
             '--ffmpeg-location', os.path.dirname(self._ffmpeg_path),
             '--output', output_path or self.config.OUTPUT_TEMPLATE,
+            '--extractor-args', 'youtube:player_client=android,web',
             url
         ]
         
